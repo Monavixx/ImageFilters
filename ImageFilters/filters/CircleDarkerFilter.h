@@ -1,11 +1,11 @@
 #pragma once
 #include "IFilter.h"
 
-class SecondFilter : public IFilter {
+class CircleDarkerFilter : public IFilter {
 private:
 	const int radius;
 public:
-	SecondFilter(const int radius = 100) : radius(radius) {}
+	CircleDarkerFilter(const int radius = 100) : radius(radius) {}
 
 	QImage filter(const QImage& image) const override {
 		QImage newImage(image.width(), image.height(), image.format());// = image;

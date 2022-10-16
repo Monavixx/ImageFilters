@@ -8,12 +8,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	connect(fileOpenImageAction, &QAction::triggered, this, &MainWindow::fileOpenImageSlot);
 	QAction* fileSaveImageAction = fileMenu->addAction("Save image", QKeySequence::Save);
 	connect(fileSaveImageAction, &QAction::triggered, this, &MainWindow::fileSaveImageSlot);
+	QAction* fileCreateNewImageAction = fileMenu->addAction("Create new image", QKeySequence::New);
+	connect(fileCreateNewImageAction, &QAction::triggered, this, &MainWindow::fileCreateNewImageSlot);
 
 	QMenu* filtersMenu = menuBar()->addMenu("Filters");
 	QAction* filterNegativeAction = filtersMenu->addAction("Negative");
 	connect(filterNegativeAction, &QAction::triggered, this, &MainWindow::filtersNegativeSlot);
-	QAction* filterSecondAction = filtersMenu->addAction("Second");
-	connect(filterSecondAction, &QAction::triggered, this, &MainWindow::filtersSecondSlot);
+	QAction* filterSecondAction = filtersMenu->addAction("Circle darker");
+	connect(filterSecondAction, &QAction::triggered, this, &MainWindow::filtersCirleDarkerSlot);
 
 	// Image
 	showedImage = new ImageWidget(this);
@@ -32,8 +34,7 @@ void MainWindow::updateImage(const QImage& image) {
 }
 
 void MainWindow::fileOpenImageSlot() {
-	QFileDialog fd(this);
-	QString filename{ fd.getOpenFileName() };
+	QString filename{ QFileDialog::getOpenFileName(this, "Open image", QStandardPaths::writableLocation(QStandardPaths::DownloadLocation), "*.png")};
 	curImage.load(filename);
 
 	updateImage();
@@ -48,7 +49,7 @@ void MainWindow::filtersNegativeSlot() {
 	updateImage();
 }
 
-void MainWindow::filtersSecondSlot() {
+void MainWindow::filtersCirleDarkerSlot() {
 	QDialog* dialog = new QDialog(this);
 	dialog->setWindowTitle("Input radius");
 	QSlider* slider = new QSlider(Qt::Horizontal, dialog);
@@ -62,12 +63,59 @@ void MainWindow::filtersSecondSlot() {
 	vlayout->addWidget(slider);
 	vlayout->addWidget(pbExit);
 	connect(slider, &QSlider::valueChanged, [this](int value) {
-		updateImage(SecondFilter(value).filter(curImage));
+		updateImage(CircleDarkerFilter(value).filter(curImage));
 	});
 	connect(pbExit, &QPushButton::clicked, [dialog, slider, this]() {
-		curImage = SecondFilter(slider->value()).filter(curImage);
+		curImage = CircleDarkerFilter(slider->value()).filter(curImage);
 		updateImage();
 		dialog->close();
 	});
 	dialog->show();	
+}
+
+void MainWindow::fileCreateNewImageSlot() {
+	if (!curImage.isNull()) {
+		QMessageBox::StandardButton reply = QMessageBox::question(this, "Test", "Delete current image?", QMessageBox::Yes | QMessageBox::No);
+		if (reply == QMessageBox::No) {
+			return;
+		}
+	}
+	QDialog* parametersOfNewImage = new QDialog(this);
+	
+	QWidget* widgetForDialog = new QWidget(parametersOfNewImage);
+	QVBoxLayout* vlayoutForDialog = new QVBoxLayout(widgetForDialog);
+
+	QHBoxLayout* widthLayout = new QHBoxLayout(widgetForDialog);
+	vlayoutForDialog->addLayout(widthLayout);
+	QLabel* widthLabel = new QLabel("Width: ", widgetForDialog);
+	widthLayout->addWidget(widthLabel);
+	QSpinBox* widthData = new QSpinBox(widgetForDialog);
+	widthData->setRange(0, 7680);
+	widthLayout->addWidget(widthData);
+
+	QHBoxLayout* heightLayout = new QHBoxLayout(widgetForDialog);
+	vlayoutForDialog->addLayout(heightLayout);
+	QLabel* heightLabel = new QLabel("Height: ", widgetForDialog);
+	heightLayout->addWidget(heightLabel);
+	QSpinBox* heightData = new QSpinBox(widgetForDialog);
+	heightData->setRange(0, 4320);
+	heightLayout->addWidget(heightData);
+
+	QPushButton* chooseColorButton = new QPushButton("Choose background color", widgetForDialog);
+	vlayoutForDialog->addWidget(chooseColorButton);
+	QColor* backgroundColor = new QColor(255, 255, 255); //white
+	connect(chooseColorButton, &QPushButton::clicked, [backgroundColor]() {
+		*backgroundColor = QColorDialog::getColor();
+	});
+	QPushButton* applyButton = new QPushButton("Create", widgetForDialog);
+	vlayoutForDialog->addWidget(applyButton);
+	connect(applyButton, &QPushButton::clicked, [widthData, heightData, backgroundColor, this, parametersOfNewImage]() {
+		curImage = QImage(widthData->value(), heightData->value(), QImage::Format_ARGB32);
+		curImage.fill(*backgroundColor);
+		delete backgroundColor;
+		updateImage();
+		parametersOfNewImage->close();
+	});
+	parametersOfNewImage->setFixedSize(widgetForDialog->sizeHint());
+	parametersOfNewImage->show();
 }

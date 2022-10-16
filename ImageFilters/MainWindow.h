@@ -18,9 +18,10 @@ public:
 private slots:
 	void fileOpenImageSlot();
 	void fileSaveImageSlot();
+	void fileCreateNewImageSlot();
 	void filtersNegativeSlot();
-	void filtersSecondSlot();
-
+	void filtersCirleDarkerSlot();
+	
 private:
 	ImageWidget* showedImage;
 	
