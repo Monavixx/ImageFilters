@@ -24,6 +24,12 @@
     <Filter Include="Header Files\filters">
       <UniqueIdentifier>{fa9e563d-58ef-4ce6-998e-05ab0471c7a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\filtersDialog">
+      <UniqueIdentifier>{0d1b7dd5-ea07-4e21-8ffa-55d114d77895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filtersDialog">
+      <UniqueIdentifier>{6aaef8b5-5ef1-4fb6-a959-c0b5e77a1b45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -32,6 +38,9 @@
     <ClCompile Include="MainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="filtersDialog\CircleDarkerDialog.cpp">
+      <Filter>Source Files\filtersDialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h">
@@ -39,6 +48,9 @@
     </QtMoc>
     <QtMoc Include="ImageWidget.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="filtersDialog\CircleDarkerDialog.h">
+      <Filter>Header Files\filtersDialog</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="filters\CircleDarkerFilter.h">
       <Filter>Header Files\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="readAll.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

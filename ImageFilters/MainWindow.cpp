@@ -50,27 +50,8 @@ void MainWindow::filtersNegativeSlot() {
 }
 
 void MainWindow::filtersCirleDarkerSlot() {
-	QDialog* dialog = new QDialog(this);
-	dialog->setWindowTitle("Input radius");
-	QSlider* slider = new QSlider(Qt::Horizontal, dialog);
-	slider->setRange(0, curImage.width() > curImage.height() ? curImage.width() : curImage.height());
-	slider->setPageStep(1);
-
-	slider->setValue(100);
-
-	QPushButton* pbExit = new QPushButton("apply", dialog);
-	QVBoxLayout* vlayout = new QVBoxLayout(dialog);
-	vlayout->addWidget(slider);
-	vlayout->addWidget(pbExit);
-	connect(slider, &QSlider::valueChanged, [this](int value) {
-		updateImage(CircleDarkerFilter(value).filter(curImage));
-	});
-	connect(pbExit, &QPushButton::clicked, [dialog, slider, this]() {
-		curImage = CircleDarkerFilter(slider->value()).filter(curImage);
-		updateImage();
-		dialog->close();
-	});
-	dialog->show();	
+	CircleDarkerDialog* dialog = new CircleDarkerDialog(this);
+	dialog->show();
 }
 
 void MainWindow::fileCreateNewImageSlot() {

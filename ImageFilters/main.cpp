@@ -4,8 +4,12 @@
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
 
-	MainWindow mw;
-	mw.showMaximized();
+	CircleDarkerFilter::init();
 
-	return app.exec();
+	MainWindow* mw = MainWindow::getInstance();
+	mw->showMaximized();
+
+	int code = app.exec();
+	delete mw;
+	return code;
 }
