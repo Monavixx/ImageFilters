@@ -41,6 +41,9 @@
     <ClCompile Include="filtersDialog\CircleDarkerDialog.cpp">
       <Filter>Source Files\filtersDialog</Filter>
     </ClCompile>
+    <ClCompile Include="PanelOfInstruments.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h">
@@ -51,6 +54,9 @@
     </QtMoc>
     <QtMoc Include="filtersDialog\CircleDarkerDialog.h">
       <Filter>Header Files\filtersDialog</Filter>
+    </QtMoc>
+    <QtMoc Include="PanelOfInstruments.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

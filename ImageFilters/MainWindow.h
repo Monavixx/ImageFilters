@@ -1,12 +1,11 @@
 #pragma once
-#include <thread>
-
 #include <QtWidgets>
 
 #include "filters/NegativeFilter.h"
 #include "filters/CircleDarkerFilter.h"
 #include "filtersDialog/CircleDarkerDialog.h"
 #include "ImageWidget.h"
+#include "PanelOfInstruments.h"
 
 class MainWindow : public QMainWindow
 {
@@ -14,6 +13,7 @@ class MainWindow : public QMainWindow
 
 public:
 	MainWindow(QWidget *parent = nullptr);
+	void init();
 	~MainWindow();
 	static MainWindow* getInstance() {
 		if (instance == nullptr) {
@@ -21,10 +21,20 @@ public:
 		}
 		return instance;
 	}
-	QImage& getCurImage() { return curImage; }
-	void setCurImage(const QImage& newImage) { curImage = newImage; }
+	QImage& curImage() {
+		return showedImage->getImage();
+	}
+	void setCurImage(const QImage& newImage) {
+		showedImage->setImage(newImage);
+	}
 	void updateImage();
 	void updateImage(const QImage& image);
+
+	ImageWidget* getShowedImage() {
+		return showedImage;
+	}
+
+public slots:
 
 private slots:
 	void fileOpenImageSlot();
@@ -37,6 +47,8 @@ private:
 	static inline MainWindow* instance;
 
 	ImageWidget* showedImage;
+	class PanelOfInstruments* panelOfInstruments;
+
+
 	
-	QImage curImage;
 };

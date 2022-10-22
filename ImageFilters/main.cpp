@@ -7,6 +7,7 @@ int main(int argc, char* argv[]) {
 	CircleDarkerFilter::init();
 
 	MainWindow* mw = MainWindow::getInstance();
+	mw->init();
 	mw->showMaximized();
 
 	int code = app.exec();

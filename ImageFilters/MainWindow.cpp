@@ -1,8 +1,13 @@
 #include "MainWindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), showedImage(nullptr), panelOfInstruments(nullptr)
 {
-	//menu
+}
+
+void MainWindow::init() {
+	showedImage = new ImageWidget(this);
+	setCentralWidget(showedImage);
+
 	QMenu* fileMenu = menuBar()->addMenu("File");
 	QAction* fileOpenImageAction = fileMenu->addAction("Open image", QKeySequence::Open);
 	connect(fileOpenImageAction, &QAction::triggered, this, &MainWindow::fileOpenImageSlot);
@@ -11,15 +16,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 	QAction* fileCreateNewImageAction = fileMenu->addAction("Create new image", QKeySequence::New);
 	connect(fileCreateNewImageAction, &QAction::triggered, this, &MainWindow::fileCreateNewImageSlot);
 
+	fileMenu->addSeparator();
+	QAction* fileQuitAction = fileMenu->addAction("Quit", QKeySequence::Quit);
+	connect(fileQuitAction, &QAction::triggered, this, &MainWindow::close);
+
 	QMenu* filtersMenu = menuBar()->addMenu("Filters");
 	QAction* filterNegativeAction = filtersMenu->addAction("Negative");
 	connect(filterNegativeAction, &QAction::triggered, this, &MainWindow::filtersNegativeSlot);
 	QAction* filterSecondAction = filtersMenu->addAction("Circle darker");
 	connect(filterSecondAction, &QAction::triggered, this, &MainWindow::filtersCirleDarkerSlot);
 
-	// Image
-	showedImage = new ImageWidget(this);
-	setCentralWidget(showedImage);
+	panelOfInstruments = new PanelOfInstruments(this);
+	auto dwpanelOfInstruments = new QDockWidget("Instruments", this);
+	dwpanelOfInstruments->setWidget(panelOfInstruments);
+	dwpanelOfInstruments->setFeatures(QDockWidget::DockWidgetMovable);
+	this->addDockWidget(Qt::LeftDockWidgetArea, dwpanelOfInstruments, Qt::Vertical);
 }
 
 MainWindow::~MainWindow()
@@ -27,25 +38,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateImage()
 {
-	showedImage->setPixmap(QPixmap::fromImage(curImage));
+	showedImage->repaint();
 }
 void MainWindow::updateImage(const QImage& image) {
-	showedImage->setPixmap(QPixmap::fromImage(image));
+	setCurImage(image);
+	updateImage();
 }
 
 void MainWindow::fileOpenImageSlot() {
 	QString filename{ QFileDialog::getOpenFileName(this, "Open image", QStandardPaths::writableLocation(QStandardPaths::DownloadLocation), "*.png")};
-	curImage.load(filename);
+	curImage().load(filename);
 
 	updateImage();
 }
 
 void MainWindow::fileSaveImageSlot() {
-	curImage.save(QFileDialog::getSaveFileName(this, "Save image", QStandardPaths::writableLocation(QStandardPaths::DownloadLocation), "*.png"));
+	curImage().save(QFileDialog::getSaveFileName(this, "Save image", QStandardPaths::writableLocation(QStandardPaths::DownloadLocation), "*.png"));
 }
 
 void MainWindow::filtersNegativeSlot() {
-	curImage = NegativeFilter().filter(curImage);
+	setCurImage(NegativeFilter().filter(curImage()));
 	updateImage();
 }
 
@@ -55,7 +67,7 @@ void MainWindow::filtersCirleDarkerSlot() {
 }
 
 void MainWindow::fileCreateNewImageSlot() {
-	if (!curImage.isNull()) {
+	if (!curImage().isNull()) {
 		QMessageBox::StandardButton reply = QMessageBox::question(this, "Test", "Delete current image?", QMessageBox::Yes | QMessageBox::No);
 		if (reply == QMessageBox::No) {
 			return;
@@ -91,8 +103,8 @@ void MainWindow::fileCreateNewImageSlot() {
 	QPushButton* applyButton = new QPushButton("Create", widgetForDialog);
 	vlayoutForDialog->addWidget(applyButton);
 	connect(applyButton, &QPushButton::clicked, [widthData, heightData, backgroundColor, this, parametersOfNewImage]() {
-		curImage = QImage(widthData->value(), heightData->value(), QImage::Format_ARGB32);
-		curImage.fill(*backgroundColor);
+		setCurImage(QImage(widthData->value(), heightData->value(), QImage::Format_ARGB32));
+		curImage().fill(*backgroundColor);
 		delete backgroundColor;
 		updateImage();
 		parametersOfNewImage->close();
@@ -100,3 +112,4 @@ void MainWindow::fileCreateNewImageSlot() {
 	parametersOfNewImage->setFixedSize(widgetForDialog->sizeHint());
 	parametersOfNewImage->show();
 }
+

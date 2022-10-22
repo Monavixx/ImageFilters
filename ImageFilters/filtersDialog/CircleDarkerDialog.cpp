@@ -5,8 +5,8 @@ CircleDarkerDialog::CircleDarkerDialog(QWidget* parent): QDialog(parent) {
 	this->setWindowTitle("Input radius");
 	QSlider* slider = new QSlider(Qt::Horizontal, this);
 	slider->setRange(0,
-		mainWindow->getCurImage().width() > mainWindow->getCurImage().height()
-		? mainWindow->getCurImage().width() : mainWindow->getCurImage().height());
+		mainWindow->curImage().width() > mainWindow->curImage().height()
+		? mainWindow->curImage().width() : mainWindow->curImage().height());
 	slider->setPageStep(1);
 
 	slider->setValue(100);
@@ -15,12 +15,14 @@ CircleDarkerDialog::CircleDarkerDialog(QWidget* parent): QDialog(parent) {
 	QVBoxLayout* vlayout = new QVBoxLayout(this);
 	vlayout->addWidget(slider);
 	vlayout->addWidget(pbExit);
-	connect(slider, &QSlider::valueChanged, [mainWindow](int value) {
-		mainWindow->updateImage(CircleDarkerFilter(value).filter(mainWindow->getCurImage()));
+
+	QImage* oldImage = new QImage(mainWindow->curImage());
+	connect(slider, &QSlider::valueChanged, [mainWindow, oldImage](int value) {
+		mainWindow->updateImage(CircleDarkerFilter(value).filter(*oldImage));
 	});
-	connect(pbExit, &QPushButton::clicked, [this, slider, mainWindow]() {
-		mainWindow->setCurImage(CircleDarkerFilter(slider->value()).filter(mainWindow->getCurImage()));
-		mainWindow->updateImage();
+	connect(pbExit, &QPushButton::clicked, [this, slider, mainWindow, oldImage]() {
+		mainWindow->updateImage(CircleDarkerFilter(slider->value()).filter(*oldImage));
 		this->close();
+		delete oldImage;
 	});
 }
