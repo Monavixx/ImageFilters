@@ -44,6 +44,9 @@
     <ClCompile Include="PanelOfInstruments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PaintManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h">
@@ -73,6 +76,9 @@
       <Filter>Header Files\filters</Filter>
     </ClInclude>
     <ClInclude Include="readAll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PaintManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

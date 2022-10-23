@@ -1,6 +1,9 @@
 #pragma once
 #include <QtWidgets>
 #include <iostream>
+#include <optional>
+
+#include "PaintManager.h"
 
 class ImageWidget : public QWidget
 {
@@ -8,7 +11,11 @@ class ImageWidget : public QWidget
 
 public:
     explicit ImageWidget(QWidget* parent = 0) :
-        QWidget(parent), mode(Mode::DEFAULT) {}
+        QWidget(parent), mode(Mode::DEFAULT) 
+    {
+        pm.setColor(QColor(255, 0, 0));
+        pm.setWidth(20);
+    }
     QImage& getImage() {
         return image;
     }
@@ -52,10 +59,10 @@ protected:
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
 
-        QSize pixSize = image.size();
-        pixSize.scale(event->rect().size(), Qt::KeepAspectRatio);
+        displayPixSize = image.size();
+        displayPixSize.scale(event->rect().size(), Qt::KeepAspectRatio);
 
-        QPixmap scaledPix = QPixmap::fromImage(image).scaled(pixSize,
+        QPixmap scaledPix = QPixmap::fromImage(image).scaled(displayPixSize,
             Qt::KeepAspectRatio,
             Qt::SmoothTransformation
         );
@@ -63,27 +70,31 @@ protected:
         posImage.setX((event->rect().size().width() - scaledPix.width()) / 2);
         posImage.setY((event->rect().size().height() - scaledPix.height()) / 2);
         painter.drawPixmap(posImage, scaledPix);
-
     }
 
 
     void mousePressEvent(QMouseEvent* e) override {
         mousePressed = true;
+        double x = (e->localPos().x() - posImage.x()) / ((double)displayPixSize.width() / (double)image.width());
+        double y = (e->localPos().y() - posImage.y()) / ((double)displayPixSize.height() / (double)image.height());
+        lastPressedPoint.emplace(x, y);
     }
     void mouseReleaseEvent(QMouseEvent* e) override {
         mousePressed = false;
+        lastPressedPoint.reset();
     }
 
     void mouseMoveEvent(QMouseEvent* e) override {
         if (mode == Mode::PAINT && mousePressed) {
-            int x = (e->localPos().x() - posImage.x()) / 2;
-            int y = (e->localPos().y() - posImage.y()) / 2;
-            image.setPixelColor(x + 1, y, QColor(0, 0, 0));
-            image.setPixelColor(x, y + 1, QColor(0, 0, 0));
-            image.setPixelColor(x - 1, y, QColor(0, 0, 0));
-            image.setPixelColor(x, y - 1, QColor(0, 0, 0));
-            image.setPixelColor(x, y, QColor(0, 0, 0));
+            double x = (e->localPos().x() - posImage.x()) / ((double)displayPixSize.width() / (double)image.width());
+            double y = (e->localPos().y() - posImage.y()) / ((double)displayPixSize.height() / (double)image.height());
+
+            if (lastPressedPoint.has_value()) {
+                pm.draw_line(image, { x, y }, *lastPressedPoint);
+            }
             repaint();
+
+            lastPressedPoint.emplace(x, y);
         }
     }
 
@@ -91,7 +102,11 @@ protected:
 private:
     QImage image;
     QPoint posImage;
+    QSize displayPixSize;
     Mode mode;
+
+    std::optional<QPointF> lastPressedPoint;
     
     bool mousePressed = false;
+    PaintManager pm;
 };

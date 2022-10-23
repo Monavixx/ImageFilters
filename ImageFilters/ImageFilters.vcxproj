@@ -106,6 +106,7 @@
     <ClCompile Include="filtersDialog\CircleDarkerDialog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="PaintManager.cpp" />
     <ClCompile Include="PanelOfInstruments.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="PanelOfInstruments.h" />
+    <ClInclude Include="PaintManager.h" />
     <ClInclude Include="readAll.h" />
     <QtMoc Include="filtersDialog\CircleDarkerDialog.h" />
     <ClInclude Include="filters\FilterList.h" />
