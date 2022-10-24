@@ -30,6 +30,9 @@
     <Filter Include="Source Files\filtersDialog">
       <UniqueIdentifier>{6aaef8b5-5ef1-4fb6-a959-c0b5e77a1b45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\filters">
+      <UniqueIdentifier>{0cf3cbfa-88c7-4be6-b12d-ab7715e03402}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -47,6 +50,21 @@
     <ClCompile Include="PaintManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="filters\CircleDarkerFilter.cpp">
+      <Filter>Source Files\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="filters\FilterList.cpp">
+      <Filter>Source Files\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="filters\NegativeFilter.cpp">
+      <Filter>Source Files\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelOfParametersOfCurrentInstrument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h">
@@ -59,6 +77,12 @@
       <Filter>Header Files\filtersDialog</Filter>
     </QtMoc>
     <QtMoc Include="PanelOfInstruments.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PanelOfParametersOfCurrentInstrument.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ProgramState.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -79,6 +103,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PaintManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InstrumentEnum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

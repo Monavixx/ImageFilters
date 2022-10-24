@@ -4,6 +4,7 @@
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
 
+	ProgramState::init();
 	CircleDarkerFilter::init();
 
 	MainWindow* mw = MainWindow::getInstance();

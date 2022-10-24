@@ -2,12 +2,6 @@
 
 #include <QtWidgets>
 
-#ifdef MAC
-#include <CL/OpenCL.hpp>
-#else
-#include <CL/cl.hpp>
-#endif
-
 #include "readAll.h"
 
 class PaintManager {
@@ -15,15 +9,14 @@ public:
 	PaintManager();
 	~PaintManager();
 
-	const QColor& getColor() const { return color; }
-	int getWidth() const { return width; }
+	const QColor& getColor() const { return pen.color(); }
+	int getWidth() const { return pen.width(); }
 
-	void setColor(const QColor& color) { this->color = color; }
-	void setColor(QColor&& color) { this->color = std::move(color); }
-	void setWidth(int width) { this->width = width; }
+	void setColor(const QColor& color) { pen.setColor(color); }
+	void setWidth(int width) { pen.setWidth(width); }
 
 	void draw_line(QImage& image, QPointF from, QPointF to);
+	void draw_point(QImage& image, QPointF point);
 private:
-	QColor color;
-	int width;
+	QPen pen;
 };

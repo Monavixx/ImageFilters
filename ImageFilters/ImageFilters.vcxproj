@@ -104,17 +104,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="filtersDialog\CircleDarkerDialog.cpp" />
+    <ClCompile Include="filters\CircleDarkerFilter.cpp" />
+    <ClCompile Include="filters\FilterList.cpp" />
+    <ClCompile Include="filters\NegativeFilter.cpp" />
+    <ClCompile Include="ImageWidget.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="PaintManager.cpp" />
     <ClCompile Include="PanelOfInstruments.cpp" />
+    <ClCompile Include="PanelOfParametersOfCurrentInstrument.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="PanelOfInstruments.h" />
+    <ClInclude Include="InstrumentEnum.h" />
     <ClInclude Include="PaintManager.h" />
+    <QtMoc Include="PanelOfParametersOfCurrentInstrument.h" />
+    <QtMoc Include="ProgramState.h" />
     <ClInclude Include="readAll.h" />
     <QtMoc Include="filtersDialog\CircleDarkerDialog.h" />
     <ClInclude Include="filters\FilterList.h" />
