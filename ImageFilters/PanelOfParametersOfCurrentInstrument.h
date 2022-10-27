@@ -1,6 +1,7 @@
 #pragma once
 #include <QtWidgets>
 #include "ProgramState.h"
+#include "MainWindow.h"
 
 class PanelOfParametersOfCurrentInstrument : public QWidget {
 	Q_OBJECT

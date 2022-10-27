@@ -6,6 +6,7 @@
 #include "filtersDialog/CircleDarkerDialog.h"
 #include "ImageWidget.h"
 #include "PanelOfInstruments.h"
+#include "PanelOfParametersOfCurrentInstrument.h"
 
 class MainWindow : public QMainWindow
 {
@@ -48,7 +49,7 @@ private:
 
 	ImageWidget* showedImage;
 	class PanelOfInstruments* panelOfInstruments;
-
+	class PanelOfParametersOfCurrentInstrument* panelOfParametersOfCurrentInstrument;
 
 	
 };

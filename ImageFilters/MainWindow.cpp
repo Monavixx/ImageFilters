@@ -31,6 +31,17 @@ void MainWindow::init() {
 	dwpanelOfInstruments->setWidget(panelOfInstruments);
 	dwpanelOfInstruments->setFeatures(QDockWidget::DockWidgetMovable);
 	this->addDockWidget(Qt::LeftDockWidgetArea, dwpanelOfInstruments, Qt::Vertical);
+
+	panelOfParametersOfCurrentInstrument = new PanelOfParametersOfCurrentInstrument(this);
+	auto dwPanelOfParametersOfCurrentInstrument = new QDockWidget("Parameters", this);
+	dwPanelOfParametersOfCurrentInstrument->setWidget(panelOfParametersOfCurrentInstrument);
+	dwPanelOfParametersOfCurrentInstrument->setFeatures(QDockWidget::DockWidgetMovable);
+	this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
+	this->setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
+	this->setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
+	this->setCorner(Qt::BottomRightCorner, Qt::NoDockWidgetArea);
+	this->addDockWidget(Qt::RightDockWidgetArea, dwPanelOfParametersOfCurrentInstrument, Qt::Horizontal);
+	
 }
 
 MainWindow::~MainWindow()

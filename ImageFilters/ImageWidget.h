@@ -15,6 +15,8 @@ public:
     QImage& getImage();
     void setImage(const QImage& image);
 
+    PaintManager& getPaintManager() { return pm; }
+
 
 public slots:
     void setPixmap(const QImage& image);
